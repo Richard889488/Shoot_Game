@@ -1,0 +1,13 @@
+{
+  "name": "face-shooter-render",
+  "version": "1.0.0",
+  "description": "多人臉部射擊遊戲 (Render 部署版)",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5"
+  }
+}

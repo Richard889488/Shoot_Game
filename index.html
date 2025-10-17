@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='zh-Hant'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Face Shooter Game</title>
+<style>
+body { background:#0b0e17; color:#fff; text-align:center; font-family:sans-serif; }
+#players { margin-top:20px; }
+video { width:80%; border:2px solid #555; border-radius:10px; }
+</style>
+</head>
+<body>
+<h1>🔫 臉部射擊遊戲</h1>
+<input id='name' placeholder='輸入名稱'>
+<button id='join'>加入遊戲</button>
+<div id='players'></div>
+<video id='cam' autoplay playsinline></video>
+<script>
+const ws = new WebSocket((location.protocol==='https:'?'wss':'ws')+'://'+location.host);
+const playersDiv = document.getElementById('players');
+ws.onmessage = (e)=>{
+  const data = JSON.parse(e.data);
+  if(data.type==='update'){
+    playersDiv.innerHTML = Object.entries(data.players).map(([id,p])=>{
+      return `<div>${p.name}: ${p.hp} HP</div>`;
+    }).join('');
+  }
+};
+document.getElementById('join').onclick=()=>{
+  const name=document.getElementById('name').value.trim();
+  if(!name)return alert('請輸入名稱');
+  ws.send(JSON.stringify({type:'register',name}));
+};
+navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+  document.getElementById('cam').srcObject=s;
+});
+</script>
+</body>
+</html>
